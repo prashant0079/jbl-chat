@@ -76,4 +76,3 @@ Demo credentials (after seeding):
 - Uses HTMX via CDN for polling and out-of-band message updates.
 - Session-based auth with Django’s built-in login/logout.
 - Migrations included; `poetry.lock` committed for reproducible installs.
-- (Optional) Add a short demo GIF if you want to showcase the flow.
