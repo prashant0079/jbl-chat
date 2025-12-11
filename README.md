@@ -1,17 +1,79 @@
 # jbl-chat
 
-Let's set the stage, you are the founder of this exciting new messaging startup, you are tasked with building the first version of a product that is aimed to evolve with feedback from the team and users.
+HTMX-enabled 1:1 chat built on Django with session auth and a simple signup flow.
 
-You're building the backend using Django, and your initial task is to leverage HTMX for interactive front-end experiences. With this first release, we want to deliver the following user stories:
+## Quickstart (TL;DR)
+```bash
+POETRY_VIRTUALENVS_IN_PROJECT=true POETRY_VIRTUALENVS_PATH=.venv poetry install
+poetry run python jbl_chat/manage.py migrate
+poetry run python jbl_chat/manage.py createsuperuser
+poetry run python jbl_chat/manage.py runserver 8001
+```
+Visit: `/accounts/login/` (or `/accounts/signup/`), then `/users/`.
 
-1. As a user, I want to see all other users on the platform.
-2. As a user, I want to view my conversation with another user.
-3. As a user, I want to be able to send messages to another user on the platform.
+## Requirements
+- Python ^3.9 (see `pyproject.toml`)
+- Poetry 1.8.x (already used in this repo)
 
-Given that this is your startup, you have the freedom to set up and utilize the practices that align with your goals. You can use any Python libraries or external tools that you prefer.
+## Setup (exact steps)
+1) Install dependencies (creates `.venv/` in project):
+```bash
+POETRY_VIRTUALENVS_IN_PROJECT=true POETRY_VIRTUALENVS_PATH=.venv poetry install
+```
 
-We have provided a Django skeleton project along with Docker setup for your convenience. Feel free to utilize Docker for development or Python virtual environments for your local setup. Since managing user registration isn’t required for this assessment, you can create dummy users directly using the shell and implement session authentication.
+2) Run migrations:
+```bash
+poetry run python jbl_chat/manage.py migrate
+```
 
-Incorporating HTMX will allow you to create dynamic, interactive elements on the front end without needing to reload the page. We encourage you to think about how HTMX can enhance user interactions effectively.
+3) Create a superuser (for admin/login):
+```bash
+poetry run python jbl_chat/manage.py createsuperuser
+```
 
-Happy coding!
+4) Start the dev server (pick a free port, e.g. 8001):
+```bash
+poetry run python jbl_chat/manage.py runserver 8001
+```
+
+5) Log in and chat:
+- Visit `/accounts/login/` (or `/accounts/signup/` to self-register), then `/users/` to start a conversation.
+
+## Features
+- Django session auth with login, logout, and signup (built-in `UserCreationForm`).
+- 1:1 conversations only; enforced ordering + uniqueness + no self chat.
+- Messaging with denormalized `last_message_at/last_message_id` for ordering.
+- HTMX interactions: incremental polling (`/chat/<id>/poll/?after=`), OOB swaps for send form + message append, partial templates.
+- Access control: only participants can view/poll/send; login required for chat views.
+- UI: minimal dark theme, message bubbles, status dots, mobile-friendly layout.
+
+## Key URLs
+- `/accounts/login/` – login
+- `/accounts/logout/` – logout
+- `/accounts/signup/` – create account
+- `/users/` – list users to start a chat
+- `/chat/<user_id>/` – conversation detail
+- `/chat/<user_id>/send/` – send message
+- `/chat/<user_id>/poll/?after=<last_id>` – incremental polling
+
+## Tests
+```bash
+poetry run python jbl_chat/manage.py test chat
+```
+
+## Seed sample data
+Populate three demo users (alice, bob, charlie; password `password123`) and sample conversations:
+```bash
+poetry run python jbl_chat/manage.py seed_demo
+```
+
+Demo credentials (after seeding):
+- alice / password123
+- bob / password123
+- charlie / password123
+
+## Notes
+- Uses HTMX via CDN for polling and out-of-band message updates.
+- Session-based auth with Django’s built-in login/logout.
+- Migrations included; `poetry.lock` committed for reproducible installs.
+- (Optional) Add a short demo GIF if you want to showcase the flow.
