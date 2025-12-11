@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up · Jbl-chat{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width: 460px; margin: 0 auto;">
+    <h2>Create account</h2>
+    <form method="post" style="display:flex; flex-direction:column; gap:12px; margin-top:12px;">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <label>Username<br>{{ form.username }}</label>
+            {% for error in form.username.errors %}
+                <div style="color:#f87171; font-size:13px;">{{ error }}</div>
+            {% endfor %}
+            <label>Password<br>{{ form.password1 }}</label>
+            {% for error in form.password1.errors %}
+                <div style="color:#f87171; font-size:13px;">{{ error }}</div>
+            {% endfor %}
+            <label>Confirm Password<br>{{ form.password2 }}</label>
+            {% for error in form.password2.errors %}
+                <div style="color:#f87171; font-size:13px;">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <button class="btn btn-primary" type="submit">Create account</button>
+    </form>
+    <p style="margin-top:14px; color:var(--muted);">Already have an account? <a href="/accounts/login/">Sign in</a></p>
+</div>
+{% endblock %}

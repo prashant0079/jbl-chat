@@ -1,0 +1,7 @@
+<div hx-swap-oob="beforeend:#messages">
+    {% include "chat/partials/message.html" with message=message %}
+</div>
+
+<div hx-swap-oob="outerHTML:#composer">
+    {% include "chat/partials/message_form.html" with form=form other=other %}
+</div>
