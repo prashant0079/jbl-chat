@@ -1,6 +1,6 @@
 <div class="bubble{% if message.sender_id == request.user.id %} mine{% endif %}" data-mid="{{ message.id }}" style="align-self:{% if message.sender_id == request.user.id %}flex-end{% else %}flex-start{% endif %};">
     <div class="bubble-meta">
-        {{ message.sender.username }} · {{ message.created_at|date:"H:i" }}
+        {{ message.sender.username }} · {{ message.created_at|date:"M d, H:i" }}
     </div>
     <div style="white-space:pre-wrap; line-height:1.5;">{{ message.body|linebreaksbr }}</div>
 </div>
