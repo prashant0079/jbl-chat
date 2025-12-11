@@ -1,0 +1,19 @@
+<div id="composer" style="border:1px solid rgba(148,163,184,0.2); border-radius:12px; padding:10px; background:rgba(15,23,42,0.7);">
+    <form
+        hx-post="{% url 'chat:send_message' other.id %}"
+        hx-target="#composer"
+        hx-swap="outerHTML"
+        style="display:flex; gap:10px; align-items:flex-start; margin-top:4px;"
+        method="post"
+    >
+        {% csrf_token %}
+        <div style="flex:1;">
+            {{ form.non_field_errors }}
+            {{ form.body }}
+            {% for error in form.body.errors %}
+                <div style="color:#f87171; font-size:13px;">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <button class="btn btn-primary" type="submit" style="height:42px; padding:0 16px;">Send</button>
+    </form>
+</div>

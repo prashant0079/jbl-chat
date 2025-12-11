@@ -1,0 +1,5 @@
+{% for message in messages %}
+    {% include "chat/partials/message.html" with message=message %}
+{% empty %}
+    <p style="color:var(--muted); margin:0;">No messages yet. Say hi!</p>
+{% endfor %}

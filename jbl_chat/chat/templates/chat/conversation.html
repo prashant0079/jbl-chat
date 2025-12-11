@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Chat with {{ other.username }} · Jbl-chat{% endblock %}
+
+{% block content %}
+<div class="panel" style="display:flex; flex-direction:column; gap:14px; height:70vh; border-top: 3px solid rgba(34,197,94,0.25);">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div style="display:flex; flex-direction:column; gap:4px;">
+            <div style="font-size:13px; color:var(--muted); letter-spacing:0.02em;">Chatting with</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span class="status-dot"></span>
+                <div style="font-size:22px; font-weight:800;">{{ other.username }}</div>
+            </div>
+        </div>
+        <a class="btn" href="{% url 'chat:users_list' %}">← Back to users</a>
+    </div>
+
+    <div id="messages"
+         class="messages"
+         style="flex:1;"
+         hx-get="{% url 'chat:poll_messages' other.id %}"
+         hx-trigger="load, every 2s"
+         hx-swap="beforeend"
+         hx-vals='js:{after: (document.querySelector("#messages .bubble:last-child")?.dataset.mid || 0)}'>
+        {% include "chat/partials/messages.html" %}
+    </div>
+
+    {% include "chat/partials/message_form.html" %}
+</div>
+{% endblock %}
