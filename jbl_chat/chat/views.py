@@ -6,6 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MessageForm
+from .models import Conversation
 from .services import (
     can_access_conversation,
     get_or_create_conversation,
@@ -83,7 +84,7 @@ def send_message_view(request, user_id):
                     "other": other,
                 },
             )
-        return redirect("conversation_detail", user_id=other.id)
+        return redirect("chat:conversation_detail", user_id=other.id)
 
     if request.headers.get("HX-Request") == "true":
         return render(
@@ -92,16 +93,19 @@ def send_message_view(request, user_id):
             {"form": form, "other": other},
             status=400,
         )
-    return redirect("conversation_detail", user_id=other.id)
+    return redirect("chat:conversation_detail", user_id=other.id)
 
 
 @login_required
 def poll_messages(request, user_id):
     other = get_object_or_404(User, id=user_id)
-    try:
-        conversation = get_or_create_conversation(request.user, other)
-    except ValueError:
+    if other == request.user:
         raise Http404("Cannot chat with yourself.")
+
+    low, high = (request.user, other) if request.user.id < other.id else (other, request.user)
+    conversation = Conversation.objects.filter(user1=low, user2=high).first()
+    if not conversation:
+        raise Http404("Conversation not found.")
 
     if not can_access_conversation(conversation, request.user):
         raise Http404("No access to this conversation.")
