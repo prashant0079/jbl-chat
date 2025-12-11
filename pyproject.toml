@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "jbl-chat"
+version = "0.1.0"
+description = ""
+authors = ["Prashant Tyagi <tyagi.prashant0099@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+django = "3.2.8"
+djangorestframework = "3.12.4"
+setuptools = "^80.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
